@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #f4f6f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .button-refresh {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .charts-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .chart-container {
+            width: 300px;
+            /* Smaller width */
+            height: 300px;
+            /* Smaller height */
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #last-updated {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Employee Data Dashboard</h1>
+
+    <button onclick="refreshCharts()" class="button-refresh">
+        🔄 Refresh Charts
+    </button>
+
+    <div class="charts-wrapper">
+        <div class="chart-container">
+            <canvas id="employeesByDepartment"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="attendanceSummary"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="performanceDistribution"></canvas>
+        </div>
+    </div>
+
+    <div id="last-updated"></div>
+
+    <script>
+        let employeesChart, attendanceChart, performanceChart;
+
+        async function fetchSummary() {
+            const response = await fetch('/summary');
+            return await response.json();
+        }
+
+        async function fetchAttendanceRate() {
+            const response = await fetch('/attendance-rate');
+            return await response.json();
+        }
+
+        async function fetchPerformanceDistribution() {
+            const response = await fetch('/performance-distribution');
+            return await response.json();
+        }
+
+        async function loadCharts() {
+            const summary = await fetchSummary();
+            const attendanceData = await fetchAttendanceRate();
+            const performanceData = await fetchPerformanceDistribution();
+
+            // Destroy old charts if they exist
+            if (employeesChart) employeesChart.destroy();
+            if (attendanceChart) attendanceChart.destroy();
+            if (performanceChart) performanceChart.destroy();
+
+            // Chart 1: Employees by Department
+            const ctx1 = document.getElementById('employeesByDepartment').getContext('2d');
+            employeesChart = new Chart(ctx1, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(summary.departments),
+                    datasets: [{
+                        label: 'Employees by Department',
+                        data: Object.values(summary.departments),
+                        backgroundColor: [
+                            '#4dc9f6', '#f67019', '#f53794', '#537bc4', '#acc236'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Attendance Summary
+            const ctx2 = document.getElementById('attendanceSummary').getContext('2d');
+            attendanceChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['Present', 'Absent'],
+                    datasets: [{
+                        label: 'Attendance',
+                        data: [summary.attendance_summary.Present, summary.attendance_summary.Absent],
+                        backgroundColor: ['#36a2eb', '#ff6384'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutBounce'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Chart 3: Performance Distribution
+            const ctx3 = document.getElementById('performanceDistribution').getContext('2d');
+            performanceChart = new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(performanceData),
+                    datasets: [{
+                        label: 'Performance Ratings',
+                        data: Object.values(performanceData),
+                        backgroundColor: '#4bc0c0',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    animation: {
+                        duration: 1200,
+                        easing: 'easeInOutQuart'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Update last updated time
+            const now = new Date();
+            document.getElementById('last-updated').innerText =
+                "Last updated: " + now.toLocaleString();
+        }
+
+        function refreshCharts() {
+            loadCharts();
+        }
+
+        // Load charts on page load
+        loadCharts();
+    </script>
+
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify,request
+from flask import Blueprint, jsonify,request,render_template
 from faker import Faker
 from models import db, Employee, Department, Attendance, Performance, Salary
 import random
@@ -6,6 +6,9 @@ from datetime import datetime, timedelta
 
 routes = Blueprint('routes', __name__)
 fake = Faker()
+@routes.route('/dashboard', methods=['GET'])
+def dashboard():
+    return render_template('dashboard.html')
 @routes.route('/attendance-rate', methods=['GET'])
 def attendance_rate():
     """
