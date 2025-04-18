@@ -1,11 +1,47 @@
-from flask import Blueprint, jsonify,request,render_template
+from flask import Blueprint, jsonify,request,render_template,Response
+from io import StringIO
+import csv
 from faker import Faker
 from models import db, Employee, Department, Attendance, Performance, Salary
 import random
 from datetime import datetime, timedelta
-
+from extensions import limiter
 routes = Blueprint('routes', __name__)
 fake = Faker()
+@routes.route('/export-employees', methods=['GET'])
+def export_employees():
+    """
+    Export Employee Data as CSV
+    ---
+    tags:
+      - Utility
+    summary: Export all employee records as a downloadable CSV file
+    responses:
+      200:
+        description: CSV file containing employee data
+    """
+    employees = Employee.query.all()
+
+    si = StringIO()
+    cw = csv.writer(si)
+    cw.writerow(['ID', 'First Name', 'Last Name', 'Email', 'Phone', 'Department', 'Date of Birth', 'Date Joined'])
+
+    for emp in employees:
+        cw.writerow([
+            emp.id,
+            emp.first_name,
+            emp.last_name,
+            emp.email,
+            emp.phone,
+            emp.department.name if emp.department else '',
+            emp.date_of_birth,
+            emp.date_joined
+        ])
+
+    output = si.getvalue()
+    response = Response(output, mimetype='text/csv')
+    response.headers["Content-Disposition"] = "attachment; filename=employees.csv"
+    return response
 @routes.route('/dashboard', methods=['GET'])
 def dashboard():
     return render_template('dashboard.html')
@@ -223,6 +259,7 @@ def employee_performance(employee_id):
         "comments": performance.comments
     })
 @routes.route('/generate-data', methods=['GET'])
+@limiter.limit("1 per minute") 
 def generate_data():
     """
     Generate Synthetic Data

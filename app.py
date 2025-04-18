@@ -1,16 +1,26 @@
-from flask import Flask, jsonify
-from models import db
+from flask import Flask, jsonify,request
+from extensions import db, limiter
+import logging
+from logging.handlers import RotatingFileHandler
+import os
 from config import Config
 from sqlalchemy import text
 from routes import routes
 from flasgger import Swagger
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 app.config.from_object(Config)
-
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["100 per hour"]  # <- example: 100 requests per hour
+)
 swagger = Swagger(app)  # <- Very Important
 
 db.init_app(app)
+limiter.init_app(app)
 
 with app.app_context():
     db.create_all()
@@ -52,7 +62,7 @@ def list_routes():
         }
         output.append(route_info)
     return jsonify(output)
-@app.route('/')
+@app.route('/health')
 def health_check():
     try:
         # Quick DB connectivity check
@@ -65,5 +75,22 @@ def health_check():
         "status": "ok" if db_status == 'up' else 'db error',
         "database": db_status
     })
+if not os.path.exists('logs'):
+    os.mkdir('logs')
+
+file_handler = RotatingFileHandler('logs/api.log', maxBytes=10240, backupCount=10)
+file_handler.setFormatter(logging.Formatter(
+    '%(asctime)s %(levelname)s: %(message)s'
+))
+file_handler.setLevel(logging.INFO)
+
+app.logger.addHandler(file_handler)
+app.logger.setLevel(logging.INFO)
+app.logger.info('API startup')
+
+# Log each request
+@app.before_request
+def log_request_info():
+    app.logger.info(f"Request: {request.method} {request.path}")
 if __name__ == '__main__':
     app.run(debug=True)

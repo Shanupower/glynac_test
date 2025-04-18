@@ -1,0 +1,52 @@
+2025-04-18 21:48:42,193 INFO: API startup
+2025-04-18 21:49:19,472 INFO: API startup
+2025-04-18 21:49:22,136 INFO: API startup
+2025-04-18 21:49:22,140 ERROR: Exception on /health [GET]
+Traceback (most recent call last):
+  File "/Users/shanug/Desktop/Glynac.ai/env/lib/python3.11/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shanug/Desktop/Glynac.ai/env/lib/python3.11/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shanug/Desktop/Glynac.ai/env/lib/python3.11/site-packages/flask/app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shanug/Desktop/Glynac.ai/env/lib/python3.11/site-packages/flask/app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shanug/Desktop/Glynac.ai/app.py", line 94, in log_request_info
+    app.logger.info(f"Request: {request.method} {request.path}")
+                                ^^^^^^^
+NameError: name 'request' is not defined
+2025-04-18 21:49:42,265 INFO: API startup
+2025-04-18 21:49:42,269 ERROR: Exception on /health [GET]
+Traceback (most recent call last):
+  File "/Users/shanug/Desktop/Glynac.ai/env/lib/python3.11/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shanug/Desktop/Glynac.ai/env/lib/python3.11/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shanug/Desktop/Glynac.ai/env/lib/python3.11/site-packages/flask/app.py", line 915, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shanug/Desktop/Glynac.ai/env/lib/python3.11/site-packages/flask/app.py", line 1291, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shanug/Desktop/Glynac.ai/app.py", line 94, in log_request_info
+    app.logger.info(f"Request: {request.method} {request.path}")
+                                ^^^^^^^
+NameError: name 'request' is not defined
+2025-04-18 21:51:11,302 INFO: API startup
+2025-04-18 21:51:11,307 INFO: Request: GET /health
+2025-04-18 21:51:20,925 INFO: API startup
+2025-04-18 21:51:20,930 INFO: Request: GET /health
+2025-04-18 21:51:25,993 INFO: API startup
+2025-04-18 21:51:25,996 INFO: Request: GET /health
+2025-04-18 21:52:56,123 INFO: API startup
+2025-04-18 21:52:56,134 INFO: Request: GET /health
+2025-04-18 21:54:28,802 INFO: API startup
+2025-04-18 21:54:28,809 INFO: Request: GET /
+2025-04-18 21:55:13,489 INFO: API startup
+2025-04-18 21:55:13,494 INFO: Request: GET /health
