@@ -1,187 +1,121 @@
-Employee Management System - 3-Hour Challenge
+# Employee Management System
 
-Overview
+Flask-based backend application for generating synthetic employee data, managing it with PostgreSQL, exposing APIs with Swagger UI, and visualizing analytics via Chart.js. Built within a 3-hour coding challenge focused on clarity, speed, and modular design.
 
-This project is a Flask-based web application designed to:
+---
 
-Generate synthetic employee data
+## Project Features
 
-Store and manage data in PostgreSQL
+This project includes:
 
-Expose REST APIs for data retrieval and analytics
+- Synthetic data generation using Faker
+- PostgreSQL database integration with SQLAlchemy ORM
+- RESTful API endpoints documented via Swagger UI
+- Chart.js frontend dashboard for visualizing employee data
+- CSV export functionality
+- API request and error logging with RotatingFileHandler
+- API rate limiting using Flask-Limiter
+- Basic unit tests for health checks
 
-Visualize employee data using Chart.js dashboard
+---
 
-Implement bonus features like CSV export, API rate limiting, and logging
+## Technologies Used
 
-Built within a 3-hour coding challenge, the project focuses on clarity, modularity, and speed.
+Python 3.11, Flask, SQLAlchemy, PostgreSQL, Flasgger (Swagger UI), Chart.js, Faker, Flask-Limiter, Python Unittest, dotenv
 
-Features
+---
 
-Employee, Department, Attendance, Performance, and Salary models
+## Folder Structure
 
-Data generation with Faker
+The main structure of the project:
 
-PostgreSQL database integration
+- app.py: Flask app initialization
+- config.py: Configuration settings
+- extensions.py: SQLAlchemy and Limiter instance definitions
+- models.py: Database models for Employee, Department, Attendance, Performance, Salary
+- routes.py: All API endpoints and dashboard route
+- templates/dashboard.html: Chart.js dashboard page
+- test_app.py: Unit tests
+- requirements.txt: Python dependencies
+- .env: Environment variables (PostgreSQL connection)
+- logs/api.log: API request and error logs
 
-REST API Endpoints with Swagger UI documentation
+---
 
-Chart.js-based visualization dashboard
+## Setup Instructions
 
-CSV Export functionality
-
-API request logging and error logging
-
-Rate limiting using Flask-Limiter
-
-Health check and basic unit testing
-
-Technologies Used
-
-Python 3.11
-
-Flask
-
-Flask-SQLAlchemy
-
-PostgreSQL
-
-Flasgger (Swagger UI)
-
-Chart.js (Frontend dashboard)
-
-Faker (Synthetic data generation)
-
-Flask-Limiter (API rate limiting)
-
-Python Unittest (Basic API testing)
-
-Folder Structure
-
-Glynac.ai/
-├── app.py # Flask app setup
-├── config.py # Configuration settings
-├── extensions.py # SQLAlchemy and Limiter instances
-├── models.py # Database models
-├── routes.py # API routes and logic
-├── templates/
-│ └── dashboard.html # Chart.js dashboard
-├── test_app.py # Basic unit tests
-├── requirements.txt # Project dependencies
-├── .env # Environment variables (DB config)
-└── logs/
-└── api.log # API logs
-
-Setup Instructions
-
-1. Clone the repository
+Clone the repository:
 
 git clone <your-repository-link>
 cd Glynac.ai
 
-2. Create and activate virtual environment
+Create and activate a virtual environment:
 
 python3 -m venv env
 source env/bin/activate
 
-3. Install requirements
+Install dependencies:
 
 pip install -r requirements.txt
 
-4. Set up PostgreSQL Database
-
-Create a PostgreSQL database
-
-Add DB credentials to .env file:
+Create a PostgreSQL database locally and update your .env file:
 
 DATABASE_URL=postgresql://username:password@localhost/databasename
 
-5. Run the app
+Run the application:
 
 python app.py
 
-Visit:
+Swagger UI will be available at http://127.0.0.1:5000/apidocs/
+Dashboard will be available at http://127.0.0.1:5000/dashboard
 
-Swagger UI at: http://127.0.0.1:5000/apidocs/
-
-Dashboard at: http://127.0.0.1:5000/dashboard
-
-6. Run tests
+Run unit tests:
 
 python test_app.py
 
-Important API Endpoints
+---
 
-Endpoint
+## Important Endpoints
 
-Purpose
+- /generate-data: Generate synthetic data (employees, departments, attendance, performance)
+- /employees: List employees with pagination and filtering
+- /departments: List all departments
+- /performance/<employee_id>: Get an employee's performance record
+- /summary: System overview (employee count, attendance summary)
+- /attendance-rate: Attendance rate per employee
+- /performance-distribution: Performance rating distribution
+- /export-employees: Download employee data as a CSV file
+- /dashboard: Visual dashboard
+- /health: System health check
 
-/generate-data
+---
 
-Generate synthetic employees and related data
+## Bonus Features
 
-/employees
+- CSV Export functionality
+- API Request and Error Logging
+- Rate Limiting using Flask-Limiter
+- Refreshable and animated Chart.js dashboard
+- Last Updated timestamp display
+- Unit Testing for /health endpoint
 
-List all employees with filters and pagination
+---
 
-/departments
+## Architecture & Design
 
-List all departments
+Modular design using separate files for models, routes, configurations, and extensions.
+Swagger UI is integrated for quick API testing.
+Frontend visualization is kept lightweight using Chart.js directly via a simple HTML template.
+Rate limiting and logging add extra robustness for production-readiness.
 
-/performance/<employee_id>
+Full explanation available in design_decisions.md.
 
-Get performance record for an employee
+---
 
-/summary
+## Author
 
-System summary (total employees, attendance, etc.)
+Built by Shanmukh Sitaram — April 2025 — for 3-Hour Coding Challenge.
 
-/attendance-rate
+---
 
-Attendance data per employee
-
-/performance-distribution
-
-Performance rating distribution
-
-/export-employees
-
-Export employee data as downloadable CSV
-
-/dashboard
-
-Visual dashboard built with Chart.js
-
-/health
-
-Health check of the system
-
-Bonus Features Implemented
-
-API rate limiting using Flask-Limiter
-
-CSV export functionality
-
-API request and error logging
-
-Chart.js dashboard with live data and refresh button
-
-Last updated timestamp on dashboard
-
-Basic unit test on health endpoint
-
-Design and Architecture
-
-For detailed architecture explanation and design choices, see:
-
-design_decisions.md
-
-Note
-
-This project is meant for educational purposes. Production deployment would require Dockerization, production-level rate limiting, authentication mechanisms, and advanced testing.
-
-Author
-
-Shanmukh Sitaram GApril 20253-Hour Challenge Submission
-
-Thank You!
+# Thank You!
