@@ -14,7 +14,7 @@ class Employee(db.Model):
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
     email = db.Column(db.String(120), unique=True)
-    phone = db.Column(db.String(20))
+    phone = db.Column(db.String(50))
     date_of_birth = db.Column(db.Date)
     date_joined = db.Column(db.Date)
     department_id = db.Column(db.Integer, db.ForeignKey('department.id'))
